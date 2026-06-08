@@ -41,10 +41,10 @@ DOCX/      : Tài liệu dự án
 
 * [x] Phân tích đề tài
 * [x] Phân công nhiệm vụ
-* [ ] Use Case Diagram
-* [ ] Activity Diagram
+* [x] Use Case Diagram
+* [x] Activity Diagram
 * [ ] Class Diagram
-* [ ] ERD
+* [x] ERD
 * [ ] Coding
 * [ ] Testing
 * [ ] Hoàn thiện báo cáo
