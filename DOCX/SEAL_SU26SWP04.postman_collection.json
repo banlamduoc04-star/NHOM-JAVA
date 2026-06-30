@@ -1,0 +1,89 @@
+{
+  "info": {
+    "name": "SEAL SU26SWP04 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "token", "value": "" },
+    { "key": "eventId", "value": "1" },
+    { "key": "trackId", "value": "1" },
+    { "key": "roundId", "value": "1" },
+    { "key": "teamId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Auth - Login Coordinator",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"coordinator@seal.edu.vn\",\n  \"password\": \"123456\"\n}" },
+        "url": "{{baseUrl}}/api/auth/login"
+      }
+    },
+    {
+      "name": "Create Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"eventName\": \"SEAL Summer 2026\",\n  \"season\": \"Summer\",\n  \"eventYear\": 2026,\n  \"status\": \"Open\",\n  \"description\": \"Software Engineering Hackathon\"\n}" },
+        "url": "{{baseUrl}}/api/events"
+      }
+    },
+    {
+      "name": "Create Track",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"eventId\": {{eventId}},\n  \"trackName\": \"Web Application\",\n  \"description\": \"Software Engineering web app category\"\n}" },
+        "url": "{{baseUrl}}/api/tracks"
+      }
+    },
+    {
+      "name": "Create Round",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"eventId\": {{eventId}},\n  \"roundName\": \"Preliminary Round\",\n  \"roundOrder\": 1,\n  \"topNAdvance\": 5,\n  \"roundType\": \"Competition\",\n  \"isCalibrationRound\": false\n}" },
+        "url": "{{baseUrl}}/api/rounds"
+      }
+    },
+    {
+      "name": "Apply Default Criteria Template",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"replaceExisting\": true\n}" },
+        "url": "{{baseUrl}}/api/criterion-templates/1/apply-to-event/{{eventId}}"
+      }
+    },
+    {
+      "name": "Get Event Standings",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/events/{{eventId}}/standings"
+      }
+    },
+    {
+      "name": "Export RBL Judge Scores CSV",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/research/event/{{eventId}}/judge-scores.csv"
+      }
+    }
+  ]
+}
