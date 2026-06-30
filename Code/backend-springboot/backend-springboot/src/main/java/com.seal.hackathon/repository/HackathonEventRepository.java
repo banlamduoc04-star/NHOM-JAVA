@@ -1,0 +1,8 @@
+package com.seal.hackathon.repository;
+
+import com.seal.hackathon.entity.HackathonEvent;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+
+public interface HackathonEventRepository extends JpaRepository<HackathonEvent, Integer> {
+}
