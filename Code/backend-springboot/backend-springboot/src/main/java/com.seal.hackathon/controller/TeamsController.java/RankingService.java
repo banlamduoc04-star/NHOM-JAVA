@@ -83,3 +83,4 @@ public class RankingService {
         public RankingItem withRank(Integer rank) { return new RankingItem(submissionId, teamId, teamName, trackId, roundId, finalScore, rank); }
     }
 }
+git á
