@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: seal-hackathon-management
+  datasource:
+    url: jdbc:h2:mem:sealdb;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+
+app:
+  jwt:
+    # Demo key only. Replace in production.
+    secret: "SEAL_SU26SWP04_DEMO_SECRET_KEY_CHANGE_ME_1234567890"
+    expiration-ms: 86400000
+  cors:
+    allowed-origins: "http://localhost:3000,http://localhost:5173"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
