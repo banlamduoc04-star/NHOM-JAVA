@@ -1,10 +1,8 @@
 package com.seal.hackathon.repository;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.seal.hackathon.entity.EventCriterion;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.*;
 
 public interface EventCriterionRepository extends JpaRepository<EventCriterion, Integer> {
     List<EventCriterion> findByEventId(Integer eventId);
