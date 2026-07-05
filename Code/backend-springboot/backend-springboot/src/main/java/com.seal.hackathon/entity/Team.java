@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 package com.seal.hackathon.entity;
 
 import java.time.LocalDateTime;
@@ -21,3 +22,5 @@ public class Team {
     @Column(nullable = false, length = 30) public String status = "Pending";
     @Column(nullable = false) public LocalDateTime createdAt = LocalDateTime.now();
 }
+=======
+>>>>>>> Stashed changes
