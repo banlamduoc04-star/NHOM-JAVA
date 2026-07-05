@@ -1,14 +1,8 @@
-<<<<<<< Updated upstream
 package com.seal.hackathon.entity;
 
-import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.*;
 
 @Entity
 @Table(name = "teams")
@@ -22,5 +16,3 @@ public class Team {
     @Column(nullable = false, length = 30) public String status = "Pending";
     @Column(nullable = false) public LocalDateTime createdAt = LocalDateTime.now();
 }
-=======
->>>>>>> Stashed changes
