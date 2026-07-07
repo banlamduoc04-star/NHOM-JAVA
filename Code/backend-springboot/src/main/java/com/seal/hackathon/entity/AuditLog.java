@@ -7,13 +7,32 @@ import java.time.*;
 @Entity
 @Table(name = "audit_logs")
 public class AuditLog {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    // Primary Key
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer auditId;
+
+    // User Information
     public Integer userId;
-    @Column(nullable = false, length = 100) public String actionName;
-    @Column(nullable = false, length = 100) public String entityName;
+
+    // Audit Information
+    @Column(nullable = false, length = 100)
+    public String actionName;
+
+    @Column(nullable = false, length = 100)
+    public String entityName;
+
     public Integer entityId;
-    @Column(length = 2000) public String oldValue;
-    @Column(length = 2000) public String newValue;
-    @Column(nullable = false) public LocalDateTime createdAt = LocalDateTime.now();
+
+    // Change History
+    @Column(length = 2000)
+    public String oldValue;
+
+    @Column(length = 2000)
+    public String newValue;
+
+    // Audit Time
+    @Column(nullable = false)
+    public LocalDateTime createdAt = LocalDateTime.now();
 }

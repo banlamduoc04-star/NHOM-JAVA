@@ -11,7 +11,27 @@ import java.util.List;
 @RequestMapping("/api/audit-logs")
 @PreAuthorize("hasRole('EventCoordinator')")
 public class AuditLogsController {
+
     private final AuditLogRepository logs;
-    public AuditLogsController(AuditLogRepository logs) { this.logs=logs; }
-    @GetMapping public List<AuditLog> get(@RequestParam(required=false) Integer userId, @RequestParam(required=false) String entityName) { if(userId!=null) return logs.findByUserId(userId); if(entityName!=null) return logs.findByEntityName(entityName); return logs.findAll(); }
+
+    public AuditLogsController(AuditLogRepository logs) {
+        this.logs = logs;
+    }
+
+    @GetMapping
+    public List<AuditLog> get(
+            @RequestParam(required = false) Integer userId,
+            @RequestParam(required = false) String entityName
+    ) {
+
+        if (userId != null) {
+            return logs.findByUserId(userId);
+        }
+
+        if (entityName != null) {
+            return logs.findByEntityName(entityName);
+        }
+
+        return logs.findAll();
+    }
 }
