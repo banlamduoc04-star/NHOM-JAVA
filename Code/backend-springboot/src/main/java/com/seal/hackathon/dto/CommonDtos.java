@@ -6,7 +6,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * DTO dùng chung cho các chức năng của hệ thống.
+ */
 public class CommonDtos {
+
+    // =========================
+    // Event
+    // =========================
+
     public record CreateEventRequest(
             @NotBlank String eventName,
             @NotBlank String season,
@@ -26,6 +34,10 @@ public class CommonDtos {
             String status,
             String description
     ) {}
+
+    // =========================
+    // Round
+    // =========================
 
     public record CreateRoundRequest(
             @NotNull Integer eventId,
@@ -50,13 +62,45 @@ public class CommonDtos {
             LocalDateTime endTime
     ) {}
 
-    public record CreateTrackRequest(@NotNull Integer eventId, @NotBlank String trackName, String description) {}
-    public record UpdateTrackRequest(String trackName, String description) {}
+    // =========================
+    // Track
+    // =========================
 
-    public record CreateTeamRequest(@NotNull Integer eventId, @NotNull Integer trackId, @NotBlank String teamName) {}
-    public record UpdateTeamStatusRequest(@NotBlank String status, String reason) {}
+    public record CreateTrackRequest(
+            @NotNull Integer eventId,
+            @NotBlank String trackName,
+            String description
+    ) {}
 
-    public record AddMemberRequest(@NotNull Integer teamId, @NotNull Integer userId, String memberRole) {}
+    public record UpdateTrackRequest(
+            String trackName,
+            String description
+    ) {}
+
+    // =========================
+    // Team
+    // =========================
+
+    public record CreateTeamRequest(
+            @NotNull Integer eventId,
+            @NotNull Integer trackId,
+            @NotBlank String teamName
+    ) {}
+
+    public record UpdateTeamStatusRequest(
+            @NotBlank String status,
+            String reason
+    ) {}
+
+    public record AddMemberRequest(
+            @NotNull Integer teamId,
+            @NotNull Integer userId,
+            String memberRole
+    ) {}
+
+    // =========================
+    // Submission
+    // =========================
 
     public record SubmitWorkRequest(
             @NotNull Integer teamId,
@@ -65,30 +109,121 @@ public class CommonDtos {
             String demoUrl,
             String reportUrl
     ) {}
-    public record EliminateSubmissionRequest(@NotBlank String reason) {}
+
+    public record EliminateSubmissionRequest(
+            @NotBlank String reason
+    ) {}
+
+    // =========================
+    // Score
+    // =========================
 
     public record CreateScoreRequest(
             @NotNull Integer submissionId,
             @NotNull Integer criterionId,
-            @NotNull @DecimalMin("0.0") BigDecimal scoreValue,
+            @NotNull
+            @DecimalMin("0.0")
+            BigDecimal scoreValue,
             String comment
     ) {}
 
-    public record CreateJudgeAssignmentRequest(@NotNull Integer roundId, @NotNull Integer trackId, @NotNull Integer judgeId) {}
+    // =========================
+    // Judge
+    // =========================
 
-    public record CreateCriterionTemplateRequest(@NotBlank String templateName, String description, List<CreateCriterionTemplateItemRequest> items) {}
-    public record CreateCriterionTemplateItemRequest(@NotBlank String criterionName, @NotNull BigDecimal maxScore, @NotNull BigDecimal weight, Integer displayOrder) {}
-    public record ApplyTemplateRequest(Boolean replaceExisting) {}
-    public record UpdateCriterionTemplateStatusRequest(Boolean isActive) {}
+    public record CreateJudgeAssignmentRequest(
+            @NotNull Integer roundId,
+            @NotNull Integer trackId,
+            @NotNull Integer judgeId
+    ) {}
 
-    public record CreateEventCriterionRequest(@NotNull Integer eventId, @NotBlank String criterionName, @NotNull BigDecimal maxScore, @NotNull BigDecimal weight) {}
-    public record UpdateEventCriterionRequest(String criterionName, BigDecimal maxScore, BigDecimal weight, Boolean isActive) {}
+    // =========================
+    // Criterion Template
+    // =========================
 
-    public record AssignTrackMentorRequest(@NotNull Integer trackId, @NotNull Integer mentorId) {}
+    public record CreateCriterionTemplateRequest(
+            @NotBlank String templateName,
+            String description,
+            List<CreateCriterionTemplateItemRequest> items
+    ) {}
 
-    public record CreatePrizeRequest(@NotNull Integer eventId, @NotNull Integer trackId, @NotBlank String prizeName, @NotNull Integer rankNo, String description) {}
-    public record AwardPrizeRequest(@NotNull Integer teamId, @NotNull Integer prizeId) {}
+    public record CreateCriterionTemplateItemRequest(
+            @NotBlank String criterionName,
+            @NotNull BigDecimal maxScore,
+            @NotNull BigDecimal weight,
+            Integer displayOrder
+    ) {}
 
-    public record CreateAnnouncementRequest(@NotNull Integer eventId, Integer trackId, String targetRole, @NotBlank String title, @NotBlank String content, Boolean isPublished) {}
-    public record UpdateAnnouncementRequest(Integer trackId, String targetRole, String title, String content, Boolean isPublished) {}
+    public record ApplyTemplateRequest(
+            Boolean replaceExisting
+    ) {}
+
+    public record UpdateCriterionTemplateStatusRequest(
+            Boolean isActive
+    ) {}
+
+    // =========================
+    // Event Criterion
+    // =========================
+
+    public record CreateEventCriterionRequest(
+            @NotNull Integer eventId,
+            @NotBlank String criterionName,
+            @NotNull BigDecimal maxScore,
+            @NotNull BigDecimal weight
+    ) {}
+
+    public record UpdateEventCriterionRequest(
+            String criterionName,
+            BigDecimal maxScore,
+            BigDecimal weight,
+            Boolean isActive
+    ) {}
+
+    // =========================
+    // Mentor
+    // =========================
+
+    public record AssignTrackMentorRequest(
+            @NotNull Integer trackId,
+            @NotNull Integer mentorId
+    ) {}
+
+    // =========================
+    // Prize
+    // =========================
+
+    public record CreatePrizeRequest(
+            @NotNull Integer eventId,
+            @NotNull Integer trackId,
+            @NotBlank String prizeName,
+            @NotNull Integer rankNo,
+            String description
+    ) {}
+
+    public record AwardPrizeRequest(
+            @NotNull Integer teamId,
+            @NotNull Integer prizeId
+    ) {}
+
+    // =========================
+    // Announcement
+    // =========================
+
+    public record CreateAnnouncementRequest(
+            @NotNull Integer eventId,
+            Integer trackId,
+            String targetRole,
+            @NotBlank String title,
+            @NotBlank String content,
+            Boolean isPublished
+    ) {}
+
+    public record UpdateAnnouncementRequest(
+            Integer trackId,
+            String targetRole,
+            String title,
+            String content,
+            Boolean isPublished
+    ) {}
 }
