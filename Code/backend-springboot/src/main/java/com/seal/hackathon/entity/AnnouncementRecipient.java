@@ -18,16 +18,17 @@ public class AnnouncementRecipient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer announcementRecipientId;
 
-    // Recipient Information
+    // Thông báo và người nhận
     @Column(nullable = false)
     public Integer announcementId;
 
     @Column(nullable = false)
     public Integer userId;
 
-    // Read Status
+    // Trạng thái đã đọc
     @Column(nullable = false)
     public Boolean isRead = false;
 
+    // Thời điểm đọc thông báo
     public LocalDateTime readAt;
 }

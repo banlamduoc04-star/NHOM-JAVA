@@ -10,35 +10,26 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "teams")
-public class Team {
+@Table(name = "team_join_requests")
+public class TeamJoinRequest {
 
     // Primary Key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer id;
+
+    // Đội mà người dùng muốn tham gia
+    @Column(nullable = false)
     public Integer teamId;
 
-    // Event mà đội tham gia
+    // Người gửi yêu cầu
     @Column(nullable = false)
-    public Integer eventId;
+    public Integer userId;
 
-    // Hạng mục của đội
+    // Trạng thái yêu cầu (PENDING / APPROVED / REJECTED / CANCELLED)
     @Column(nullable = false)
-    public Integer trackId;
+    public String status = "PENDING";
 
-    // Tên đội thi
-    @Column(nullable = false, length = 150)
-    public String teamName;
-
-    // ID trưởng nhóm
-    @Column(nullable = false)
-    public Integer leaderId;
-
-    // Trạng thái đội
-    @Column(nullable = false, length = 30)
-    public String status = "Pending";
-
-    // Thời gian tạo đội
-    @Column(nullable = false)
+    // Thời điểm gửi yêu cầu
     public LocalDateTime createdAt = LocalDateTime.now();
 }

@@ -1,8 +1,13 @@
 package com.seal.hackathon.entity;
 
-import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.time.*;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "announcements")
@@ -13,16 +18,17 @@ public class Announcement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer announcementId;
 
-    // Event Information
+    // Sự kiện và người tạo thông báo
     @Column(nullable = false)
     public Integer eventId;
 
     @Column(nullable = false)
     public Integer createdBy;
 
+    // Track áp dụng (nếu có)
     public Integer trackId;
 
-    // Announcement Information
+    // Nội dung thông báo
     @Column(nullable = false, length = 30)
     public String targetRole = "All";
 
@@ -35,7 +41,7 @@ public class Announcement {
     @Column(nullable = false)
     public Boolean isPublished = true;
 
-    // Audit Information
+    // Thời điểm tạo thông báo
     @Column(nullable = false)
     public LocalDateTime createdAt = LocalDateTime.now();
 }
