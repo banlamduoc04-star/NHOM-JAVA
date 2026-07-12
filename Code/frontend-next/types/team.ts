@@ -5,6 +5,7 @@ export interface Track {
     eventId?: string;
     trackName?: string;
     description?: string;
+    status?: 'Active' | 'Inactive' | string;
     [key: string]: unknown;
 }
 
@@ -12,6 +13,7 @@ export interface CreateTrackPayload {
     eventId: number | string;
     trackName: string;
     description?: string;
+    status?: 'Active' | 'Inactive' | string;
     [key: string]: unknown;
 }
 
@@ -62,5 +64,24 @@ export interface AddTeamMemberPayload {
     teamId: number | string;
     userId: number | string;
     memberRole?: string;
+    [key: string]: unknown;
+}
+
+export type MemberState = 'NO_TEAM' | 'PENDING_REQUEST' | 'JOINED_TEAM' | 'UNKNOWN';
+
+export interface MyTeamState {
+    state: MemberState;
+    isLeader: boolean;
+    teams: Team[];
+    pendingRequests: TeamJoinRequest[];
+    [key: string]: unknown;
+}
+
+export interface TeamJoinRequest {
+    id?: string | number;
+    teamId?: string | number;
+    userId?: string | number;
+    status?: string;
+    createdAt?: string;
     [key: string]: unknown;
 }

@@ -17,10 +17,12 @@ public class AuthDtos {
 
     public record LoginResponse(
             String token,
-            String email,
-            String role,
             Integer userId,
+            String email,
             String fullName,
+            String role,
+            String roleName,
+            Boolean approved,
             Boolean isApproved
     ) {}
 
@@ -46,6 +48,10 @@ public class AuthDtos {
             String message
     ) {}
 
+    public record MessageResponse(
+            String message
+    ) {}
+
     // Register
     public record RegisterUserRequest(
             @Email @NotBlank String email,
@@ -59,9 +65,17 @@ public class AuthDtos {
 
     public record CreateStaffAccountRequest(
             @Email @NotBlank String email,
-            @NotBlank String password,
+            String password,
             @NotBlank String fullName,
             @NotBlank String roleName,
+            String userType
+    ) {}
+
+    public record UpdateUserRequest(
+            String fullName,
+            String email,
+            String password,
+            String roleName,
             String userType
     ) {}
 

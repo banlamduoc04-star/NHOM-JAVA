@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -22,6 +23,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final SecureRandom secureRandom = new SecureRandom();
+
 
     public AuthController(
             AppUserRepository userRepository,
@@ -33,26 +35,34 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
+
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @Valid @RequestBody RegisterUserRequest request
     ) {
 
-        String normalizedEmail = request.email().trim().toLowerCase();
+        String normalizedEmail = request.email()
+                .trim()
+                .toLowerCase();
 
         if (userRepository.existsByEmail(normalizedEmail)) {
             return ResponseEntity.badRequest()
                     .body(ApiError.of("SE40003", "Email đã tồn tại"));
         }
 
-        String studentType = request.studentType().trim().toUpperCase();
+        String studentType = request.studentType()
+                .trim()
+                .toUpperCase();
 
         if (studentType.equals("FPT")
                 && (request.fptStudentCode() == null
                 || request.fptStudentCode().isBlank())) {
 
             return ResponseEntity.badRequest()
-                    .body(ApiError.of("SE40004", "Vui lòng nhập mã số sinh viên FPT"));
+                    .body(ApiError.of(
+                            "SE40004",
+                            "Vui lòng nhập mã số sinh viên FPT"
+                    ));
         }
 
         if (studentType.equals("EXTERNAL")
@@ -62,8 +72,12 @@ public class AuthController {
                 || request.universityName().isBlank()))) {
 
             return ResponseEntity.badRequest()
-                    .body(ApiError.of("SE40005", "Vui lòng nhập mã số sinh viên và tên trường"));
+                    .body(ApiError.of(
+                            "SE40005",
+                            "Vui lòng nhập mã số sinh viên và tên trường"
+                    ));
         }
+
 
         AppUser user = new AppUser();
 
@@ -73,13 +87,20 @@ public class AuthController {
         user.roleName = "TeamMember";
         user.userType = "Student";
         user.isApproved = false;
+        user.accountStatus = "Pending";
         user.fptStudentCode = request.fptStudentCode();
         user.externalStudentCode = request.externalStudentCode();
         user.universityName = request.universityName();
 
+        userRepository.save(user);
+
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userRepository.save(user));
+                .body(new MessageResponse(
+                        "Đăng ký thành công. Tài khoản cần Ban tổ chức phê duyệt."
+                ));
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
@@ -91,28 +112,68 @@ public class AuthController {
                 .orElse(null);
 
         if (user == null
-                || !passwordEncoder.matches(request.password(), user.passwordHash)) {
+                || !passwordEncoder.matches(
+                request.password(),
+                user.passwordHash
+        )) {
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiError.of("SE40101", "Email hoặc mật khẩu không đúng"));
+                    .body(ApiError.of(
+                            "SE40101",
+                            "Email hoặc mật khẩu không đúng"
+                    ));
         }
 
-        if (Boolean.FALSE.equals(user.isApproved)) {
+
+        String accountStatus =
+                user.accountStatus == null || user.accountStatus.isBlank()
+                        ? (Boolean.TRUE.equals(user.isApproved)
+                        ? "Active"
+                        : "Pending")
+                        : user.accountStatus;
+
+
+        if ("Locked".equalsIgnoreCase(accountStatus)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(ApiError.of("SE40302", "Tài khoản đang chờ Ban tổ chức phê duyệt"));
+                    .body(ApiError.of(
+                            "SE40303",
+                            "Tài khoản đã bị khóa. Vui lòng liên hệ Ban tổ chức."
+                    ));
         }
+
+        if ("Rejected".equalsIgnoreCase(accountStatus)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiError.of(
+                            "SE40304",
+                            "Tài khoản đã bị từ chối."
+                    ));
+        }
+
+        if (Boolean.FALSE.equals(user.isApproved)
+                || "Pending".equalsIgnoreCase(accountStatus)) {
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiError.of(
+                            "SE40302",
+                            "Tài khoản đang chờ Ban tổ chức phê duyệt"
+                    ));
+        }
+
 
         return ResponseEntity.ok(
                 new LoginResponse(
                         jwtUtil.generateToken(user),
-                        user.email,
-                        user.roleName,
                         user.userId,
+                        user.email,
                         user.fullName,
+                        user.roleName,
+                        user.roleName,
+                        user.isApproved,
                         user.isApproved
                 )
         );
     }
+
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(
@@ -123,8 +184,11 @@ public class AuthController {
                 .findByEmail(request.email().trim().toLowerCase())
                 .orElse(null);
 
+
         String message =
-                "Nếu email tồn tại trong hệ thống, mã đặt lại mật khẩu đã được tạo. Trong bản triển khai thật, mã này cần được gửi qua email.";
+                "Nếu email tồn tại trong hệ thống, mã đặt lại mật khẩu đã được tạo. "
+                        + "Trong bản triển khai thật, mã này cần được gửi qua email.";
+
 
         if (user == null) {
             return ResponseEntity.ok(
@@ -132,20 +196,24 @@ public class AuthController {
             );
         }
 
+
         String resetCode = String.format(
                 "%06d",
                 secureRandom.nextInt(1_000_000)
         );
+
 
         user.passwordResetToken = resetCode;
         user.passwordResetExpiresAt = LocalDateTime.now().plusMinutes(15);
 
         userRepository.save(user);
 
+
         return ResponseEntity.ok(
                 new ForgotPasswordResponse(message, resetCode)
         );
     }
+
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(
@@ -156,23 +224,36 @@ public class AuthController {
                 .findByEmail(request.email().trim().toLowerCase())
                 .orElse(null);
 
+
         if (user == null
                 || user.passwordResetToken == null
                 || !user.passwordResetToken.equals(request.resetCode().trim())) {
+
             return ResponseEntity.badRequest()
-                    .body(ApiError.of("SE40006", "Mã đặt lại mật khẩu không hợp lệ"));
+                    .body(ApiError.of(
+                            "SE40006",
+                            "Mã đặt lại mật khẩu không hợp lệ"
+                    ));
         }
+
+
         if (user.passwordResetExpiresAt == null
                 || user.passwordResetExpiresAt.isBefore(LocalDateTime.now())) {
+
             return ResponseEntity.badRequest()
-                    .body(ApiError.of("SE40007", "Mã đặt lại mật khẩu đã hết hạn"));
+                    .body(ApiError.of(
+                            "SE40007",
+                            "Mã đặt lại mật khẩu đã hết hạn"
+                    ));
         }
+
 
         user.passwordHash = passwordEncoder.encode(request.newPassword());
         user.passwordResetToken = null;
         user.passwordResetExpiresAt = null;
 
         userRepository.save(user);
+
 
         return ResponseEntity.ok(
                 new ResetPasswordResponse(

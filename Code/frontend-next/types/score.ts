@@ -23,6 +23,9 @@ export interface Criterion {
     criterionId?: string;
     eventId?: string;
     criterionName?: string;
+    description?: string;
+    trackId?: string | number;
+    roundId?: string | number;
     maxScore?: number;
     weight?: number;
     isActive?: boolean;
@@ -32,6 +35,9 @@ export interface Criterion {
 export interface CreateCriterionPayload {
     eventId: number | string;
     criterionName: string;
+    description?: string;
+    trackId?: number | string;
+    roundId?: number | string;
     maxScore: number;
     weight: number;
     [key: string]: unknown;
@@ -60,6 +66,23 @@ export interface Score {
     [key: string]: unknown;
 }
 
+export interface ScoreSummary {
+    eventId?: number | string;
+    eventName?: string;
+    trackId?: number | string;
+    categoryName?: string;
+    roundId?: number | string;
+    roundName?: string;
+    submissionId?: number | string;
+    teamId?: number | string;
+    teamName?: string;
+    judgeId?: number | string;
+    judgeName?: string;
+    criterionScores?: Record<string, number>;
+    totalScore?: number;
+    averageScore?: number;
+}
+
 export interface SubmitScorePayload {
     submissionId: number | string;
     criterionId?: number | string;
@@ -72,13 +95,37 @@ export interface SubmitScorePayload {
 }
 
 export interface RankingRow {
-    teamId?: string;
+    teamId?: string | number;
     teamName?: string;
-    trackId?: string;
+    trackId?: string | number;
     rank?: number;
+    rankNo?: number;
     totalScore?: number;
+    finalScore?: number;
     averageScore?: number;
+    isPublished?: boolean;
+    isAdvanced?: boolean;
     [key: string]: unknown;
+}
+
+export interface RankingExportRow extends RankingRow {
+    eventId?: string | number;
+    eventName?: string;
+    roundId?: string | number;
+    roundName?: string;
+    trackName?: string;
+    awardStatus?: string;
+    resultStatus?: 'Qualified' | 'Eliminated' | 'Winner' | 'Not Published' | string;
+    criterionScores?: Array<{
+        criterionId?: number | string;
+        criterionName?: string;
+        description?: string;
+        maxScore?: number;
+        weight?: number;
+        averageScore?: number;
+    }>;
+    judgeCount?: number;
+    submissionId?: string | number;
 }
 
 export interface ScoreCompleteness {

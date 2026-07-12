@@ -10,4 +10,3 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Integer> {
     List<AuditLog> findByEntityName(String entityName);
 
     List<AuditLog> findByUserId(Integer userId);
-}

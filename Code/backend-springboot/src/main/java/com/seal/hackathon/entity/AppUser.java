@@ -1,5 +1,6 @@
 package com.seal.hackathon.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.*;
@@ -24,6 +25,7 @@ public class AppUser {
     public String email;
 
     @Column(nullable = false, length = 255)
+    @JsonIgnore
     public String passwordHash;
 
     @Column(nullable = false, length = 30)
@@ -34,6 +36,9 @@ public class AppUser {
 
     @Column(nullable = false)
     public Boolean isApproved = false;
+
+    @Column(length = 30)
+    public String accountStatus = "Pending";
 
     // Student Information
     @Column(length = 30)
@@ -47,8 +52,10 @@ public class AppUser {
 
     // Password Reset
     @Column(length = 120)
+    @JsonIgnore
     public String passwordResetToken;
 
+    @JsonIgnore
     public LocalDateTime passwordResetExpiresAt;
 
     // Audit Information

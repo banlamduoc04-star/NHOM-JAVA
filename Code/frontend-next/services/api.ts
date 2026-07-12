@@ -46,7 +46,11 @@ export async function apiFetch<T = unknown>(path: string, init: RequestInit = {}
     const headers = new Headers(init.headers);
 
     if (init.body && !headers.has('Content-Type')) {
-        headers.set('Content-Type', 'application/json');
+        headers.set('Content-Type', 'application/json; charset=utf-8');
+    }
+
+    if (!headers.has('Accept')) {
+        headers.set('Accept', 'application/json; charset=utf-8');
     }
 
     if (token) {
@@ -63,6 +67,33 @@ export async function apiFetch<T = unknown>(path: string, init: RequestInit = {}
 
     const text = await res.text();
     return (text ? JSON.parse(text) : null) as T;
+}
+
+function fileNameFromDisposition(disposition: string | null): string | null {
+    if (!disposition) return null;
+    const utf8 = disposition.match(/filename\*=UTF-8''([^;]+)/i);
+    if (utf8?.[1]) return decodeURIComponent(utf8[1].replace(/"/g, ''));
+    const normal = disposition.match(/filename="?([^";]+)"?/i);
+    return normal?.[1] || null;
+}
+
+export async function downloadFile(path: string, fallbackFileName: string): Promise<void> {
+    const token = getToken();
+    const headers = new Headers();
+    headers.set('Accept', '*/*');
+    if (token) headers.set('Authorization', `Bearer ${token}`);
+
+    const res = await fetch(`${API_BASE}${path}`, { headers });
+    if (!res.ok) throw new Error(await readError(res));
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileNameFromDisposition(res.headers.get('Content-Disposition')) || fallbackFileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
 }
 
 export function query(params: QueryParams = {}): string {
