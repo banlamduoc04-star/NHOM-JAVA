@@ -1,4 +1,4 @@
-import { apiFetch, type ApiId } from './api';
+import { apiFetch, query, type ApiId } from './api';
 import type {
     CreateCriterionPayload,
     Criterion,
@@ -6,8 +6,15 @@ import type {
     UpdateCriterionPayload
 } from '@/types/score';
 
-export const getCriteria = (eventId: ApiId, includeInactive = true): Promise<Criterion[]> =>
-    apiFetch<Criterion[]>(`/api/event-criteria/event/${eventId}?includeInactive=${includeInactive}`);
+export const getCriteria = (
+    eventId: ApiId,
+    includeInactive = true,
+    filters: { trackId?: ApiId; roundId?: ApiId } = {}
+): Promise<Criterion[]> =>
+    apiFetch<Criterion[]>(`/api/event-criteria/event/${eventId}${query({ includeInactive, ...filters })}`);
+
+export const getCriterion = (id: ApiId): Promise<Criterion> =>
+    apiFetch<Criterion>(`/api/event-criteria/${id}`);
 
 export const createCriterion = (payload: CreateCriterionPayload): Promise<Criterion> =>
     apiFetch<Criterion>('/api/event-criteria', {
@@ -21,8 +28,11 @@ export const updateCriterion = (id: ApiId, payload: UpdateCriterionPayload): Pro
         body: JSON.stringify(payload)
     });
 
-export const deactivateCriterion = (id: ApiId): Promise<null> =>
-    apiFetch<null>(`/api/event-criteria/${id}`, { method: 'DELETE' });
+export const deactivateCriterion = (id: ApiId): Promise<Criterion> =>
+    apiFetch<Criterion>(`/api/event-criteria/${id}`, { method: 'DELETE' });
+
+export const deleteCriterion = (id: ApiId): Promise<Criterion> =>
+    apiFetch<Criterion>(`/api/event-criteria/${id}?permanent=true`, { method: 'DELETE' });
 
 export const getTemplates = (): Promise<CriterionTemplate[]> => apiFetch<CriterionTemplate[]>('/api/criterion-templates');
 

@@ -35,3 +35,6 @@ export const createAnnouncement = (payload: CreateAnnouncementPayload): Promise<
         method: 'POST',
         body: JSON.stringify(payload)
     });
+
+export const deleteEvent = (id: ApiId): Promise<null> =>
+    apiFetch<null>(`/api/events/${id}`, { method: 'DELETE' });

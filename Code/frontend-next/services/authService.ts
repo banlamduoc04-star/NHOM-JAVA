@@ -44,4 +44,3 @@ export const resetPassword = async (
         body: JSON.stringify({ email, resetCode, newPassword })
     });
 };
-s
