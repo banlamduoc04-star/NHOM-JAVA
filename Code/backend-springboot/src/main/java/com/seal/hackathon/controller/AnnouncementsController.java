@@ -1,16 +1,29 @@
 package com.seal.hackathon.controller;
 
-import com.seal.hackathon.config.GlobalExceptionHandler.ResourceNotFoundException;
-import com.seal.hackathon.dto.CommonDtos.*;
-import com.seal.hackathon.entity.*;
-import com.seal.hackathon.repository.*;
-import com.seal.hackathon.security.SecurityUtil;
-import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.seal.hackathon.config.GlobalExceptionHandler.ResourceNotFoundException;
+import com.seal.hackathon.dto.CommonDtos.*;
+import com.seal.hackathon.dto.CommonDtos.CreateAnnouncementRequest;
+import com.seal.hackathon.dto.CommonDtos.UpdateAnnouncementRequest;
+import com.seal.hackathon.entity.Announcement;
+import com.seal.hackathon.entity.AnnouncementRecipient;
+import com.seal.hackathon.repository.AnnouncementRecipientRepository;
+import com.seal.hackathon.repository.AnnouncementRepository;
+import com.seal.hackathon.security.SecurityUtil;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/announcements")
@@ -47,7 +60,7 @@ public class AnnouncementsController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('EventCoordinator')")
+    @PreAuthorize("hasAnyRole('EventCoordinator','Admin')")
     public Announcement create(
             @Valid @RequestBody CreateAnnouncementRequest r
     ) {
@@ -57,11 +70,14 @@ public class AnnouncementsController {
         a.eventId = r.eventId();
         a.trackId = r.trackId();
         a.createdBy = SecurityUtil.currentUserId();
+
         a.targetRole = r.targetRole() == null
                 ? "All"
                 : r.targetRole();
+
         a.title = r.title();
         a.content = r.content();
+
         a.isPublished = r.isPublished() == null
                 || r.isPublished();
 
@@ -69,7 +85,7 @@ public class AnnouncementsController {
     }
 
     @PutMapping("/{announcementId}")
-    @PreAuthorize("hasRole('EventCoordinator')")
+    @PreAuthorize("hasAnyRole('EventCoordinator','Admin')")
     public Announcement update(
             @PathVariable Integer announcementId,
             @RequestBody UpdateAnnouncementRequest r
