@@ -1,28 +1,41 @@
 import { apiFetch, query, type ApiId, type QueryParams } from './api';
-import type { AddTeamMemberPayload, CreateTeamPayload, Team, TeamMember, TeamStatus } from '@/types/team';
+import type {
+    AssignTrackMentorPayload,
+    CreateTrackPayload,
+    Track,
+    TrackMentor,
+    UpdateTrackPayload
+} from '@/types/team';
 
-export const getTeams = (params: QueryParams = {}): Promise<Team[]> =>
-    apiFetch<Team[]>(`/api/teams${query(params)}`);
+export const getTracks = (eventId?: ApiId): Promise<Track[]> =>
+    apiFetch<Track[]>(`/api/tracks${query({ eventId })}`);
 
-export const getTeam = (id: ApiId): Promise<Team> => apiFetch<Team>(`/api/teams/${id}`);
+export const getTrack = (id: ApiId): Promise<Track> =>
+    apiFetch<Track>(`/api/tracks/${id}`);
 
-export const createTeam = (payload: CreateTeamPayload): Promise<Team> =>
-    apiFetch<Team>('/api/teams', {
+export const createTrack = (payload: CreateTrackPayload): Promise<Track> =>
+    apiFetch<Track>('/api/tracks', {
         method: 'POST',
         body: JSON.stringify(payload)
     });
 
-export const updateTeamStatus = (id: ApiId, status: TeamStatus, reason = ''): Promise<Team> =>
-    apiFetch<Team>(`/api/teams/${id}/status`, {
-        method: 'PATCH',
-        body: JSON.stringify({ status, reason })
+export const updateTrack = (id: ApiId, payload: UpdateTrackPayload): Promise<Track> =>
+    apiFetch<Track>(`/api/tracks/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(payload)
     });
 
-export const addTeamMember = (payload: AddTeamMemberPayload): Promise<TeamMember> =>
-    apiFetch<TeamMember>('/api/team-members', {
+export const deleteTrack = (id: ApiId): Promise<null> =>
+    apiFetch<null>(`/api/tracks/${id}`, { method: 'DELETE' });
+
+export const getTrackMentors = (params: QueryParams = {}): Promise<TrackMentor[]> =>
+    apiFetch<TrackMentor[]>(`/api/track-mentors${query(params)}`);
+
+export const assignTrackMentor = (payload: AssignTrackMentorPayload): Promise<TrackMentor> =>
+    apiFetch<TrackMentor>('/api/track-mentors', {
         method: 'POST',
         body: JSON.stringify(payload)
     });
 
-export const getTeamMembers = (teamId: ApiId): Promise<TeamMember[]> =>
-    apiFetch<TeamMember[]>(`/api/team-members/${teamId}`);
+export const removeTrackMentor = (id: ApiId): Promise<null> =>
+    apiFetch<null>(`/api/track-mentors/${id}`, { method: 'DELETE' });

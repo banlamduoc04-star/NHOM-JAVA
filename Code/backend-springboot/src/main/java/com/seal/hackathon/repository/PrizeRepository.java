@@ -8,4 +8,5 @@ public interface PrizeRepository extends JpaRepository<Prize, Integer> {
     List<Prize> findByEventId(Integer eventId);
     List<Prize> findByTrackId(Integer trackId);
     List<Prize> findByEventIdAndTrackId(Integer eventId, Integer trackId);
+    boolean existsByTrackId(Integer trackId);
 }

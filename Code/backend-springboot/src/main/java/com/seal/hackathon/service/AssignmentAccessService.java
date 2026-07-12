@@ -1,15 +1,14 @@
 package com.seal.hackathon.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.seal.hackathon.entity.JudgeAssignment;
 import com.seal.hackathon.entity.Team;
 import com.seal.hackathon.repository.AssignmentTeamRepository;
 import com.seal.hackathon.repository.JudgeAssignmentRepository;
 import com.seal.hackathon.repository.TeamMemberRepository;
 import com.seal.hackathon.repository.TeamRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AssignmentAccessService {
