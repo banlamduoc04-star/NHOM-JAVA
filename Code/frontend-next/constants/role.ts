@@ -3,7 +3,8 @@ import type { TeamStatus } from '@/types/team';
 import type { UserRole } from '@/types/user';
 
 export const ROLE_LABELS: Record<string, string> = {
-    EventCoordinator: 'Ban tổ chức',
+    Admin: 'Quản trị viên',
+    EventCoordinator: 'Quản trị viên',
     TeamMember: 'Thành viên đội',
     Mentor: 'Mentor',
     Judge: 'Giám khảo',

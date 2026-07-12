@@ -4,14 +4,19 @@ import com.seal.hackathon.entity.AuditLog;
 import com.seal.hackathon.repository.AuditLogRepository;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class AuditService {
 
     private final AuditLogRepository auditLogRepository;
 
-    public AuditService(AuditLogRepository auditLogRepository) {
+
+    public AuditService(
+            AuditLogRepository auditLogRepository
+    ) {
         this.auditLogRepository = auditLogRepository;
     }
+
 
     public void log(
             Integer userId,
@@ -21,6 +26,7 @@ public class AuditService {
             String oldValue,
             String newValue
     ) {
+
         AuditLog log = new AuditLog();
 
         log.userId = userId;
@@ -29,6 +35,7 @@ public class AuditService {
         log.entityId = entityId;
         log.oldValue = oldValue;
         log.newValue = newValue;
+
 
         auditLogRepository.save(log);
     }

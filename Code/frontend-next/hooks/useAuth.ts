@@ -23,7 +23,7 @@ export default function useAuth({ redirect = true }: UseAuthOptions = {}): UseAu
         const currentUser = getCurrentUser();
 
         if (!token || !currentUser) {
-            if (redirect) window.location.replace('/login');
+            if (redirect) window.location.replace('/auth/login');
             setAuthReady(true);
             return;
         }
@@ -34,7 +34,7 @@ export default function useAuth({ redirect = true }: UseAuthOptions = {}): UseAu
 
     function logout(): void {
         clearSession();
-        window.location.href = '/login';
+        window.location.href = '/auth/login';
     }
 
     return { user, authReady, logout };

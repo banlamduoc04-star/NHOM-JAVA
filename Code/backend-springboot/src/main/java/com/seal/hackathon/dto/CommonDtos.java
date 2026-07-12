@@ -69,12 +69,14 @@ public class CommonDtos {
     public record CreateTrackRequest(
             @NotNull Integer eventId,
             @NotBlank String trackName,
-            String description
+            String description,
+            String status
     ) {}
 
     public record UpdateTrackRequest(
             String trackName,
-            String description
+            String description,
+            String status
     ) {}
 
     // =========================
@@ -84,7 +86,8 @@ public class CommonDtos {
     public record CreateTeamRequest(
             @NotNull Integer eventId,
             @NotNull Integer trackId,
-            @NotBlank String teamName
+            @NotBlank String teamName,
+            Integer leaderId
     ) {}
 
     public record UpdateTeamStatusRequest(
@@ -134,7 +137,8 @@ public class CommonDtos {
     public record CreateJudgeAssignmentRequest(
             @NotNull Integer roundId,
             @NotNull Integer trackId,
-            @NotNull Integer judgeId
+            @NotNull Integer judgeId,
+            List<Integer> teamIds
     ) {}
 
     // =========================
@@ -168,13 +172,19 @@ public class CommonDtos {
 
     public record CreateEventCriterionRequest(
             @NotNull Integer eventId,
+            Integer trackId,
+            Integer roundId,
             @NotBlank String criterionName,
+            String description,
             @NotNull BigDecimal maxScore,
             @NotNull BigDecimal weight
     ) {}
 
     public record UpdateEventCriterionRequest(
+            Integer trackId,
+            Integer roundId,
             String criterionName,
+            String description,
             BigDecimal maxScore,
             BigDecimal weight,
             Boolean isActive

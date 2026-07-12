@@ -1,4 +1,5 @@
 export type UserRole =
+    | 'Admin'
     | 'EventCoordinator'
     | 'TeamMember'
     | 'Mentor'
@@ -20,7 +21,11 @@ export interface User {
     externalStudentCode?: string;
     universityName?: string;
     approved?: boolean;
+    isApproved?: boolean;
     status?: UserStatus;
+    accountStatus?: 'Pending' | 'Active' | 'Locked' | 'Rejected' | string;
+    userType?: string;
+    createdAt?: string;
     [key: string]: unknown;
 }
 
@@ -61,6 +66,14 @@ export interface CreateStaffPayload {
     [key: string]: unknown;
 }
 
+export interface UpdateUserPayload {
+    fullName?: string;
+    email?: string;
+    password?: string;
+    roleName?: UserRole;
+    userType?: string;
+}
+
 export interface JudgeAssignment {
     judgeAssignmentId?: string;
     assignmentId?: string;
@@ -69,7 +82,20 @@ export interface JudgeAssignment {
     trackId?: number | string;
     roundId?: number | string;
     submissionId?: number | string;
+    teamIds?: Array<number | string>;
     [key: string]: unknown;
+}
+
+export interface AssignmentDetail extends JudgeAssignment {
+    eventName?: string;
+    categoryName?: string;
+    roundName?: string;
+    assigneeId?: number | string;
+    assigneeName?: string;
+    assigneeRole?: UserRole;
+    teamCount?: number;
+    allTeamsInCategory?: boolean;
+    teams?: Array<{ teamId?: number | string; teamName?: string; status?: string; memberCount?: number }>;
 }
 
 export interface AssignJudgePayload {
@@ -78,5 +104,6 @@ export interface AssignJudgePayload {
     trackId?: number | string;
     roundId?: number | string;
     submissionId?: number | string;
+    teamIds?: Array<number | string>;
     [key: string]: unknown;
 }
