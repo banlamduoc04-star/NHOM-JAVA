@@ -55,8 +55,9 @@ public class SubmissionsController {
         return filterReadable(data);
     }
 
-
-    
+    @GetMapping("/team/{teamId}")
+    public List<Submission> byTeam(@PathVariable Integer teamId) {
+        return filterReadable(submissions.findByTeamId(teamId));
     }
 
     @PostMapping
