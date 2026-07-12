@@ -1,8 +1,11 @@
 package com.seal.hackathon.repository;
 
-import com.seal.hackathon.entity.Submission;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.*;
+
+import com.seal.hackathon.entity.Submission;
 
 public interface SubmissionRepository extends JpaRepository<Submission, Integer> {
     List<Submission> findByRoundId(Integer roundId);

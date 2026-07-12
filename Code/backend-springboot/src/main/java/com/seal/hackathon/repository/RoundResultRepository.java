@@ -1,8 +1,11 @@
 package com.seal.hackathon.repository;
 
-import com.seal.hackathon.entity.RoundResult;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.*;
+
+import com.seal.hackathon.entity.RoundResult;
 
 public interface RoundResultRepository extends JpaRepository<RoundResult, Integer> {
     List<RoundResult> findByRoundId(Integer roundId);
