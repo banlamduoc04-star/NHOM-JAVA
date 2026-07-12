@@ -1,10 +1,28 @@
 package com.seal.hackathon.repository;
 
-import com.seal.hackathon.entity.EventCriterion;
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.*;
+import java.util.List;
 
-public interface EventCriterionRepository extends JpaRepository<EventCriterion, Integer> {
-    List<EventCriterion> findByEventId(Integer eventId);
-    List<EventCriterion> findByEventIdAndIsActive(Integer eventId, Boolean isActive);
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.seal.hackathon.entity.EventCriterion;
+
+public interface EventCriterionRepository
+extends JpaRepository<EventCriterion, Integer> {
+List<EventCriterion> findByEventId(
+        Integer eventId
+);
+
+List<EventCriterion> findByEventIdAndIsActive(
+        Integer eventId,
+        Boolean isActive
+);
+
+boolean existsByTrackId(
+        Integer trackId
+);
+
+boolean existsByRoundId(
+        Integer roundId
+);
+
 }

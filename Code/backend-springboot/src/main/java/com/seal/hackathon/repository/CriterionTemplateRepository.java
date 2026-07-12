@@ -1,8 +1,9 @@
 package com.seal.hackathon.repository;
 
-import com.seal.hackathon.entity.CriterionTemplate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.seal.hackathon.entity.CriterionTemplate;
 
-public interface CriterionTemplateRepository extends JpaRepository<CriterionTemplate, Integer> {
+public interface CriterionTemplateRepository
+extends JpaRepository<CriterionTemplate, Integer> {
 }
