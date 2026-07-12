@@ -1,7 +1,5 @@
 package com.seal.hackathon.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,29 +10,20 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(
-name = "judge_assignments",
+name = "assignment_teams",
 uniqueConstraints = @UniqueConstraint(
-columnNames = {
-"roundId",
-"trackId",
-"judgeId"
-}
+columnNames = {"assignmentId","teamId"}
 )
 )
-public class JudgeAssignment {
+public class AssignmentTeam {
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
+public Integer id;
+
+@Column(nullable = false)
 public Integer assignmentId;
 
 @Column(nullable = false)
-public Integer roundId;
+public Integer teamId;
 
-@Column(nullable = false)
-public Integer trackId;
-
-@Column(nullable = false)
-public Integer judgeId;
-
-@Column(nullable = false)
-public LocalDateTime assignedAt = LocalDateTime.now();
 }
